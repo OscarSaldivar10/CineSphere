@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineSphere | Validación de Acceso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/Estilos1.css">
+    <style>
+        :root {
+            --rojo-cine: #e50914;
+            --negro-fondo: #141414;
+            --gris-card: #1f1f1f;
+            --blanco: #ffffff;
+            --texto-gris: #b3b3b3;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--negro-fondo);
+            color: var(--blanco);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background-color: #000000;
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--rojo-cine);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: var(--rojo-cine);
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 38px;
+            color: var(--texto-gris);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--texto-gris);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+            outline: none;
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--rojo-cine);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: var(--rojo-cine);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background: #b80710;
+        }
+
+        .msg {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Nombre de Usuario</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="nombre" required placeholder="Ingresa tu nombre">
+            </div>
+
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="correo" required placeholder="ejemplo@correo.com">
+            </div>
+
+            <button type="submit" class="btn-login">Verificar Acceso</button>
+            <div id="responseMsg" class="msg"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const msgDiv = document.getElementById('responseMsg');
+            const correoInput = document.getElementById('correo').value.trim();
+            const payload = {
+                nombre: document.getElementById('nombre').value.trim(),
+                correo: correoInput
+            };
+
+            // MODIFICADO: Detección inteligente de URL base para la conexión con el servidor FastAPI
+            const API_BASE_URL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+                ? 'http://127.0.0.1:9090/api'
+                : 'https://cinesphere-backend-oscar.onrender.com/api';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                msgDiv.style.display = 'block';
+
+                if (response.ok) {
+                    msgDiv.style.backgroundColor = 'rgba(46, 204, 113, 0.1)';
+                    msgDiv.style.color = '#2ecc71';
+                    msgDiv.innerText = "✅ " + data.mensaje;
+                    
+                    // Guardamos el correo en el almacenamiento local del navegador
+                    localStorage.setItem('usuario_sesion_correo', correoInput);
+                    
+                    setTimeout(() => {
+                        window.location.href = 'inicio_de_sesion.html';
+                    }, 1500);
+                } else {
+                    msgDiv.style.backgroundColor = 'rgba(229, 9, 20, 0.1)';
+                    msgDiv.style.color = '#e50914';
+                    msgDiv.innerText = "❌ " + (data.detail || data.mensaje || "Credenciales incorrectas.");
+                }
+            } catch (error) {
+                msgDiv.style.display = 'block';
+                msgDiv.style.backgroundColor = 'rgba(229, 9, 20, 0.1)';
+                msgDiv.style.color = '#e50914';
+                msgDiv.innerText = "❌ Error en el sistema al conectar con el backend.";
+            }
+        };
+    </script>
+</body>
+</html>

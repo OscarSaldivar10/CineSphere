@@ -1,0 +1,161 @@
+/* 1. Configuración General */
+:root {
+    --primary-color: #e50914; /* Rojo Cine */
+    --bg-color: #0f0f0f;      /* Fondo casi negro */
+    --card-bg: #1f1f1f;       /* Fondo de tarjeta */
+    --text-color: #ffffff;
+    --accent-color: #f5c518;  /* Dorado tipo IMDb */
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+/* 2. Header y Buscador */
+header {
+    padding: 3rem 2rem;
+    text-align: center;
+    background: linear-gradient(to bottom, #1a1a1a, var(--bg-color));
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+input, select, button {
+    padding: 12px 25px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+
+input {
+    width: 350px;
+    background: #2a2a2a;
+    color: white;
+    border: 1px solid transparent;
+    transition: border 0.3s;
+}
+
+input:focus {
+    border: 1px solid var(--primary-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #b20710;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+}
+
+/* 3. Grid de Películas - ¡Aquí se mostrará tu catálogo! */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.movie-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.movie-card img {
+    width: 100%;
+    height: 330px;
+    object-fit: cover;
+    background: #333; /* Color de carga */
+}
+
+.movie-info {
+    padding: 15px;
+    background: linear-gradient(to top, #111, var(--card-bg));
+}
+
+.movie-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-info span {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* 4. Ventana Modal */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.95);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    margin: 2% auto;
+    width: 90%;
+    max-width: 1000px;
+    aspect-ratio: 16/9;
+}
+
+.close {
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+/* 5. Responsive */
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    input { width: 100%; }
+    .grid-container { padding: 20px; gap: 15px; }
+    .movie-card img { height: 250px; }
+}

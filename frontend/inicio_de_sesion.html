@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineSphere | Panel de Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --rojo-cine: #e50914;
+            --negro-fondo: #141414;
+            --gris-card: #1f1f1f;
+            --blanco: #ffffff;
+            --texto-gris: #b3b3b3;
+            --transicion: all 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--negro-fondo);
+            color: var(--blanco);
+            overflow-x: hidden;
+        }
+
+        /* --- NAVEGACIÓN --- */
+        header {
+            background: #000;
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--rojo-cine);
+        }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: var(--rojo-cine); font-size: 1.8rem; font-weight: bold; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .user-menu { display: flex; gap: 25px; list-style: none; margin: 0; padding: 0; align-items: center; }
+        .user-menu li a { color: var(--blanco); text-decoration: none; font-weight: 500; transition: var(--transicion); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .user-menu li a:hover { color: var(--rojo-cine); }
+
+        /* --- DROPDOWN INTERNO DE TOP CINE --- */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1a1a;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            z-index: 1050;
+            border-radius: 8px;
+            border: 1px solid #333;
+            top: 100%;
+            left: 0;
+            padding: 10px 0;
+        }
+        .dropdown-content a {
+            color: white !important;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            font-weight: normal !important;
+            transition: var(--transicion);
+            cursor: pointer;
+        }
+        .dropdown-content a:hover { background-color: var(--rojo-cine); color: white !important; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown:hover > a { color: var(--rojo-cine); }
+
+        .btn-logout { 
+            color: var(--rojo-cine) !important; 
+            border: 1px solid var(--rojo-cine); 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+        }
+        .btn-logout:hover { background: var(--rojo-cine); color: white !important; }
+
+        /* --- BUSCADOR --- */
+        .search-section { padding: 60px 5% 40px; text-align: center; background: linear-gradient(to bottom, #000 0%, var(--negro-fondo) 100%); }
+        .search-box { display: flex; justify-content: center; max-width: 700px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); padding: 5px; border-radius: 40px; border: 1px solid #333; }
+        #searchInput { flex: 1; padding: 15px 25px; border: none; background: transparent; color: white; outline: none; font-size: 1.1rem; }
+        #searchBtn { padding: 15px 35px; background: var(--rojo-cine); color: white; border: none; border-radius: 40px; font-weight: bold; cursor: pointer; transition: var(--transicion); }
+        #searchBtn:hover { background: #b20710; transform: scale(1.05); }
+
+        /* --- GRID Y CARDS --- */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px 5%; }
+
+        .movie-card {
+            background-color: var(--gris-card);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: var(--transicion);
+            border: 1px solid #333;
+        }
+        .movie-card:hover { transform: translateY(-10px); border-color: var(--rojo-cine); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .movie-card img { width: 100%; height: 320px; object-fit: cover; }
+
+        .movie-info { padding: 15px; text-align: center; }
+        .movie-info h3 { margin: 0 0 10px; font-size: 1rem; height: 2.4em; overflow: hidden; }
+        
+        .btn-details {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: var(--rojo-cine);
+            border: 1px solid var(--rojo-cine);
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transicion);
+        }
+        .btn-details:hover { background: var(--rojo-cine); color: white; }
+
+        /* --- MODAL DE DETALLES --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--gris-card);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--rojo-cine);
+        }
+
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--blanco); }
+        .close-modal:hover { color: var(--rojo-cine); }
+
+        /* --- LOADER --- */
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: var(--rojo-cine); width: 45px; height: 45px; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        
+        /* Mensaje de Error */
+        #errorMessage { text-align: center; padding: 50px; display: none; }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; text-align: center; }
+            .user-menu { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .logo { font-size: 1.5rem; }
+            .search-section { padding: 30px 5%; }
+            .grid-container { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo" id="logoLink">CineSphere</a>
+            <ul class="user-menu">
+                <li><a href="inicio_de_sesion.html"><i class="fas fa-home"></i> Inicio</a></li>
+                
+                <li class="dropdown">
+                    <a id="viewTopMovies"><i class="fas fa-trophy"></i> Top Cine <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
+                    <div class="dropdown-content">
+                        <a onclick="cargarFiltroEspecial('mejores')"><i class="fas fa-heart" style="color: #2ecc71; margin-right: 8px;"></i> Las 5 Mejores de 2026</a>
+                        <a onclick="cargarFiltroEspecial('menos_vistas')"><i class="fas fa-eye-slash" style="color: #f1c40f; margin-right: 8px;"></i> Las 5 Menos Vistas de 2026</a>
+                    </div>
+                </li>
+                
+                <li><a href="#" id="viewFavorites"><i class="fas fa-star"></i> Mis Favoritos</a></li>
+                <li><a href="Index.html" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Busca títulos para tu colección...">
+            <button id="searchBtn">Buscar</button>
+        </div>
+    </section>
+
+    <div id="loader" style="display: none;">
+        <div class="spinner"></div>
+        <p style="text-align: center; color: var(--blanco);">Cargando catálogo premium...</p>
+    </div>
+
+    <main id="movieGrid" class="grid-container"></main>
+
+    <div id="errorMessage">
+        <i class="fas fa-search fa-3x" style="color: var(--rojo-cine); margin-bottom: 15px;"></i>
+        <p>No se encontraron películas.</p> 
+    </div>
+
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 40px; background: #000; border-top: 1px solid #333; margin-top: 50px;">
+        <p>© 2026 CineSphere Premium - Desarrollado por <strong>Oscar Saldivar Jimenez</strong></p>
+    </footer>
+
+    <script src="JS/app.js"></script>
+
+    <script>
+        async function cargarFiltroEspecial(tipo) {
+            if (typeof getMovies === 'function' && typeof showMovies === 'function') {
+                // Generamos el endpoint limpio con el parámetro discriminador para Python
+                const endpoint = `/peliculas?top_type=${tipo}`;
+                const movies = await getMovies(endpoint);
+                showMovies(movies);
+            } else {
+                console.error("Las funciones principales de inyección aún no cargan.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+services:
+  # CONTENEDOR 1: Backend (FastAPI + SQLite)
+  backend:
+    build: ./backend
+    container_name: cinesphere-backend
+    ports:
+      - "9090:8000"  # Cambiado a 8080 para evitar el bloqueo de permisos de Windows
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app  # Mapea tu carpeta local al contenedor
+    restart: always
+    networks:
+      - cinesphere_net
+
+  # CONTENEDOR 2: Frontend (Nginx)
+  frontend:
+    build: ./frontend
+    container_name: cinesphere-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html  # Permite ver cambios en tiempo real
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - cinesphere_net
+
+networks:
+  cinesphere_net:
+    driver: bridge
