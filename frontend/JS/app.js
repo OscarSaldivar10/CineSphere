@@ -1,7 +1,7 @@
-// MODIFICADO: Detección automática de entorno para desarrollo local (puerto 9090) o producción en Render
+// CORREGIDO: Detección automática de entorno apuntando al ID activo de Render (3iqr)
 const API_BASE_URL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
     ? 'http://127.0.0.1:9090/api'
-    : 'https://cinesphere-backend-oscar.onrender.com/api';
+    : 'https://cinesphere-3iqr.onrender.com/api';
 
 const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 

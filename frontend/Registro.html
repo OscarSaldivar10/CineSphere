@@ -191,10 +191,10 @@
                 telefono: document.getElementById('telefono').value.trim()
             };
 
-            // MODIFICADO: Discriminador de endpoint automático según el Hostname activo
+            // CORREGIDO: Enrutador apuntando a tu ID real de Render (3iqr)
             const API_BASE_URL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
                 ? 'http://127.0.0.1:9090/api'
-                : 'https://cinesphere-backend-oscar.onrender.com/api';
+                : 'https://cinesphere-3iqr.onrender.com/api';
 
             try {
                 const response = await fetch(`${API_BASE_URL}/registro`, {
