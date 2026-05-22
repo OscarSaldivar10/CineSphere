@@ -167,7 +167,6 @@
         <nav class="navbar">
             <a href="#" class="logo" id="logoLink">CineSphere</a>
             <ul class="user-menu">
-                /* El botón Inicio se mantiene intacto apuntando a tu panel */
                 <li><a href="inicio_de_sesion.html"><i class="fas fa-home"></i> Inicio</a></li>
                 
                 <li class="dropdown">
@@ -179,8 +178,6 @@
                 </li>
                 
                 <li><a href="#" id="viewFavorites"><i class="fas fa-star"></i> Mis Favoritos</a></li>
-                
-                /* CORREGIDO: Redirección limpia a index.html y limpieza segura del localStorage al cerrar sesión */
                 <li><a href="index.html" class="btn-logout" onclick="localStorage.clear();"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
             </ul>
         </nav>
@@ -221,7 +218,6 @@
     <script>
         async function cargarFiltroEspecial(tipo) {
             if (typeof getMovies === 'function' && typeof showMovies === 'function') {
-                // Generamos el endpoint limpio con el parámetro discriminador para Python
                 const endpoint = `/peliculas?top_type=${tipo}`;
                 const movies = await getMovies(endpoint);
                 showMovies(movies);
