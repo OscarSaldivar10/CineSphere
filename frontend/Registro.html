@@ -149,8 +149,14 @@
             <div class="form-group">
                 <label>Número Telefónico</label>
                 <i class="fas fa-phone"></i>
-                <!-- MODIFICADO: Agregada validación estricta por expresión regular para asegurar exactamente 10 dígitos -->
                 <input type="tel" id="telefono" required placeholder="Número a 10 dígitos" pattern="[0-9]{10}" title="El número telefónico debe contener exactamente 10 dígitos numéricos sin espacios ni guiones.">
+            </div>
+
+            <!-- NUEVO: Campo de contraseña con validación de caracteres especiales -->
+            <div class="form-group">
+                <label>Contraseña</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="contrasena" required placeholder="Mínimo 8 caracteres y un símbolo" pattern="(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}" title="La contraseña debe tener un mínimo de 8 caracteres e incluir al menos un carácter especial (ej. @, #, $, %, etc.).">
             </div>
 
             <label>Validación Humana (Captcha)</label>
@@ -189,7 +195,8 @@
                 nombre: document.getElementById('nombre').value.trim(),
                 apellido: document.getElementById('apellido').value.trim(),
                 correo: document.getElementById('correo').value.trim(),
-                telefono: document.getElementById('telefono').value.trim()
+                telefono: document.getElementById('telefono').value.trim(),
+                contrasena: document.getElementById('contrasena').value // Se añade la contraseña al payload
             };
 
             // CORREGIDO: Enrutador apuntando a tu ID real de Render (3iqr)
