@@ -149,14 +149,13 @@
             <div class="form-group">
                 <label>Número Telefónico</label>
                 <i class="fas fa-phone"></i>
-                <input type="tel" id="telefono" required placeholder="Número a 10 dígitos" pattern="[0-9]{10}" title="El número telefónico debe contener exactamente 10 dígitos numéricos sin espacios ni guiones.">
+                <input type="tel" id="telefono" required placeholder="Número a 10 dígitos" pattern="[0-9]{10}">
             </div>
 
-            <!-- NUEVO: Campo de contraseña con validación de caracteres especiales -->
             <div class="form-group">
                 <label>Contraseña</label>
                 <i class="fas fa-lock"></i>
-                <input type="password" id="contrasena" required placeholder="Mínimo 8 caracteres y un símbolo" pattern="(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}" title="La contraseña debe tener un mínimo de 8 caracteres e incluir al menos un carácter especial (ej. @, #, $, %, etc.).">
+                <input type="password" id="contrasena" required placeholder="Mínimo 8 caracteres y un símbolo" pattern="(?=.*[!@#$%^&*(),.? :{}|<>]).{8,}">
             </div>
 
             <label>Validación Humana (Captcha)</label>
@@ -171,7 +170,6 @@
     </div>
 
     <script>
-        // Lógica del Captcha Matemático Aleatorio
         let num1 = Math.floor(Math.random() * 10) + 1;
         let num2 = Math.floor(Math.random() * 10) + 1;
         let captchaResult = num1 + num2;
@@ -183,7 +181,6 @@
             const msgDiv = document.getElementById('responseMsg');
             const userCaptcha = parseInt(document.getElementById('captchaAnswer').value);
 
-            // Validar Captcha en el Cliente
             if (userCaptcha !== captchaResult) {
                 msgDiv.style.display = 'block';
                 msgDiv.style.color = '#e50914';
@@ -196,10 +193,9 @@
                 apellido: document.getElementById('apellido').value.trim(),
                 correo: document.getElementById('correo').value.trim(),
                 telefono: document.getElementById('telefono').value.trim(),
-                contrasena: document.getElementById('contrasena').value // Se añade la contraseña al payload
+                contrasena: document.getElementById('contrasena').value
             };
 
-            // CORREGIDO: Enrutador apuntando a tu ID real de Render (3iqr)
             const API_BASE_URL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
                 ? 'http://127.0.0.1:9090/api'
                 : 'https://cinesphere-3iqr.onrender.com/api';
