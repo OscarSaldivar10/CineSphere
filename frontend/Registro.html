@@ -149,7 +149,8 @@
             <div class="form-group">
                 <label>Número Telefónico</label>
                 <i class="fas fa-phone"></i>
-                <input type="tel" id="telefono" required placeholder="Número a 10 dígitos">
+                <!-- MODIFICADO: Agregada validación estricta por expresión regular para asegurar exactamente 10 dígitos -->
+                <input type="tel" id="telefono" required placeholder="Número a 10 dígitos" pattern="[0-9]{10}" title="El número telefónico debe contener exactamente 10 dígitos numéricos sin espacios ni guiones.">
             </div>
 
             <label>Validación Humana (Captcha)</label>
